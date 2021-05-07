@@ -1,7 +1,7 @@
 import logging
-from telegram.ext.dispatcher import run_async
 from nhentaiBot import dp, updater
-from telegram.ext import CommandHandler
+from telegram.ext import CommandHandler, InlineQueryHandler
+from nhentaiBot.helpers.Inline_query import search_query
 
 
 def start(update, context):
@@ -44,6 +44,7 @@ def main():
     dp.add_handler(CommandHandler("start", start, run_async=True))
     dp.add_handler(CommandHandler("code", code, run_async=True))
     dp.add_handler(CommandHandler("help", help, run_async=True))
+    dp.add_handler(InlineQueryHandler(search_query))
     updater.start_polling()
     updater.idle()
 
