@@ -18,7 +18,7 @@ def search_q(query):
     nh = NH()
     main_c = []
     pages = 3
-    rf = re.findall(r"^[0-9]$", string=query)
+    rf = re.findall(r"^[0-9]+$", string=query)
     if len(rf) > 0:
         return main_c
     for i in range(1, pages+1):

@@ -3,6 +3,8 @@ from telegram import ForceReply, InputMediaPhoto
 from nhentaiBot.pyfunc.searcher import search_q
 from telegram_bot_pagination import InlineKeyboardPaginator
 from telegram.ext import ConversationHandler
+import logging
+from nhentaiBot.helpers.constants import DEL_FAIL_LOG
 # ------- GLOBAL VAR ----------
 s_SEARCH_DATA = {}
 
@@ -51,9 +53,14 @@ def s_search_callback(update, context):
 
 def s_conv(update, context):
     global s_SEARCH_DATA
+    try:
+        context.bot.deleteMessage(
+            chat_id=update.message.chat_id, message_id=update.message.message_id)
+    except Exception as e:
+        logging.error(DEL_FAIL_LOG)
     query = " ".join(context.args)
     if len(query) < 1:
-        update.message.reply_text("Enter the s/ID to download.",
+        update.message.reply_text("Search here ...",
                                   reply_markup=ForceReply(force_reply=True, selective=True))
         return 999
     else:
@@ -92,6 +99,11 @@ def s_conv(update, context):
 
 
 def s_with_q(update, context):
+    try:
+        context.bot.deleteMessage(
+            chat_id=update.message.chat_id, message_id=update.message.message_id)
+    except Exception as e:
+        logging.error(DEL_FAIL_LOG)
     global s_SEARCH_DATA
     query = update.message.text
     if len(query) < 1:
