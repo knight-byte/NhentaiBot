@@ -35,7 +35,7 @@ To Start Inline select:
 
 
 def code(update, context):
-    text = "feature code"
+    text = "`feature code\nWIP`"
     try:
         context.bot.deleteMessage(
             chat_id=update.message.chat_id, message_id=update.message.message_id)
@@ -53,6 +53,7 @@ def help(update, context):
     text = """\
 `start` : `to start the bot`
 `code`  : `download with code`
+`search`: `Search nHentia`
 """
     try:
         context.bot.deleteMessage(
@@ -64,7 +65,7 @@ def help(update, context):
 
 
 def status(update, context):
-    text = "Status up"
+    text = "`Status up`"
     try:
         context.bot.deleteMessage(
             chat_id=update.message.chat_id, message_id=update.message.message_id)
@@ -80,6 +81,7 @@ def main():
     dp.add_handler(CommandHandler("start", start, run_async=True))
     dp.add_handler(CommandHandler("status", status, run_async=True))
     dp.add_handler(CommandHandler("help", help, run_async=True))
+    dp.add_handler(CommandHandler("code", code, run_async=True))
     dp.add_handler(InlineQueryHandler(search_query))
     dp.add_handler(ConversationHandler(entry_points=[CommandHandler('search', s_conv, run_async=True)],
                                        states={

@@ -95,7 +95,7 @@ def s_with_q(update, context):
     global s_SEARCH_DATA
     query = update.message.text
     if len(query) < 1:
-        update.message.reply_text("Enter the s/ID to download.",
+        update.message.reply_text("Search here ...",
                                   reply_markup=ForceReply(force_reply=True, selective=True))
         return 999
     else:
