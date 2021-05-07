@@ -5,7 +5,7 @@ import re
 def homepage():
     nh = NH()
     main_c = []
-    pages = 3
+    pages = 2
     for i in range(1, pages+1):
         HomePage = nh.get_pages(page=i)
         hp = HomePage.__dict__
@@ -17,7 +17,7 @@ def homepage():
 def search_q(query):
     nh = NH()
     main_c = []
-    pages = 3
+    pages = 2
     rf = re.findall(r"^[0-9]+$", string=query)
     if len(rf) > 0:
         return main_c
