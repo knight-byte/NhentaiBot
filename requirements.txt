@@ -5,6 +5,7 @@ chardet==4.0.0
 idna==2.10
 NHentai-API==0.0.15
 python-telegram-bot==13.5
+python-telegram-bot-pagination==0.0.2
 pytz==2021.1
 requests==2.25.1
 six==1.16.0
