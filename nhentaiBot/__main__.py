@@ -17,6 +17,13 @@ def start(update, context):
 Type `/help` to see all Commands.
 To Start Inline select:
 """
+
+    # Keyboard markup for Search here and Share
+    reply_markup = InlineKeyboardMarkup(search_k)
+
+    # Sending bot Message
+    context.bot.sendMessage(chat_id=update.message.chat_id,
+                            text=text, parse_mode="Markdown", reply_markup=reply_markup)
     try:
         # Deleting the User command message
         context.bot.deleteMessage(
@@ -26,27 +33,20 @@ To Start Inline select:
         # Loging the error if unable to delete message due to insufficient permission
         logging.error(DEL_FAIL_LOG)
 
-    # Keyboard markup for Search here and Share
-    reply_markup = InlineKeyboardMarkup(search_k)
-
-    # Sending bot Message
-    context.bot.sendMessage(chat_id=update.message.chat_id,
-                            text=text, parse_mode="Markdown", reply_markup=reply_markup)
-
 
 def code(update, context):
     text = "`feature code\nWIP`"
+    query = ""
+
+    # Calling Download funciton ( download with ID )
+    data = download_func(query)
+    context.bot.sendMessage(chat_id=update.message.chat_id,
+                            text=text, parse_mode="Markdown")
     try:
         context.bot.deleteMessage(
             chat_id=update.message.chat_id, message_id=update.message.message_id)
     except Exception as e:
         logging.error(DEL_FAIL_LOG)
-        query = ""
-
-        # Calling Download funciton ( download with ID )
-        data = download_func(query)
-    context.bot.sendMessage(chat_id=update.message.chat_id,
-                            text=text, parse_mode="Markdown")
 
 
 def help(update, context):
@@ -66,13 +66,13 @@ def help(update, context):
 
 def status(update, context):
     text = "`Status up`"
+    context.bot.sendMessage(chat_id=update.message.chat_id,
+                            text=text, parse_mode="Markdown")
     try:
         context.bot.deleteMessage(
             chat_id=update.message.chat_id, message_id=update.message.message_id)
     except Exception as e:
         logging.error(DEL_FAIL_LOG)
-    context.bot.sendMessage(chat_id=update.message.chat_id,
-                            text=text, parse_mode="Markdown")
 
 
 def main():

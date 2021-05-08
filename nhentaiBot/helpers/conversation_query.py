@@ -61,11 +61,6 @@ def s_search_callback(update, context):
 
 def s_conv(update, context):
     global S_SEARCH_DATA
-    try:
-        context.bot.deleteMessage(
-            chat_id=update.message.chat_id, message_id=update.message.message_id)
-    except Exception as e:
-        logging.error(DEL_FAIL_LOG)
     query = " ".join(context.args)
     if len(query) < 1:
         update.message.reply_text("Search here ...",
@@ -73,14 +68,15 @@ def s_conv(update, context):
         return 999
     else:
         pagination_search_context(update, context, query)
-
-
-def s_with_q(update, context):
     try:
         context.bot.deleteMessage(
             chat_id=update.message.chat_id, message_id=update.message.message_id)
+
     except Exception as e:
         logging.error(DEL_FAIL_LOG)
+
+
+def s_with_q(update, context):
     global S_SEARCH_DATA
     query = update.message.text
     if len(query) < 1:
@@ -89,6 +85,11 @@ def s_with_q(update, context):
         return 999
     else:
         pagination_search_context(update, context, query)
+    try:
+        context.bot.deleteMessage(
+            chat_id=update.message.chat_id, message_id=update.message.message_id)
+    except Exception as e:
+        logging.error(DEL_FAIL_LOG)
 
 
 def pagination_search_context(update, context, query):
