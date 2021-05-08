@@ -1,3 +1,6 @@
+from dataclasses import replace
+import logging
+from typing import final
 from NHentai import NHentai as NH
 import re
 
@@ -27,3 +30,23 @@ def search_q(query):
         h = s_r["doujins"]
         main_c.extend(h)
     return main_c
+
+
+def id_search_q(query):
+    nh = NH()
+    rf = re.findall(r"^(#)?([0-9]+)$", string=query)
+    id = {}
+    if len(rf) > 0:
+        try:
+            query = query.replace('#', '')
+            id = nh._get_doujin(id=query).__dict__
+            # id store dict obeject with keys: id, title, secondary title, tags(list), artist(list), lang(list), categories(list)
+            #                                 characters(list), parodies(list), groups(list), images(list), total page
+        except AttributeError:
+            logging.error("No result found")
+        return id
+    else:
+        return id
+
+
+print(len(id_search_q("999")["images"]))
