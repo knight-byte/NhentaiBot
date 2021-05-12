@@ -1,10 +1,13 @@
 # ---------- IMPORTS --------
+from nhentaiBot.pyfunc.Image_to_pdf import image_pdf
 from telegram import ForceReply, InputMediaPhoto, InlineKeyboardButton
 from nhentaiBot.pyfunc.searcher import search_q, id_search_q
 from telegram_bot_pagination import InlineKeyboardPaginator
 from telegram.ext import ConversationHandler
 import logging
 from nhentaiBot.helpers.constants import DEL_FAIL_LOG
+import os
+
 # ------- GLOBAL VAR ----------
 S_SEARCH_DATA = {}
 SINGLE_MANGA_DATA = {}
@@ -19,7 +22,8 @@ def callback_alarm(context):
 
 # End the Conersation
 def cancel(update, context):
-    context.bot.sendMessage("You cancelled.")
+    context.bot.sendMessage(
+        chat_id=update.message.chat_id, text="`You cancelled.`", parse_mode="Markdown")
     # conversationHandle end
     return ConversationHandler.END
 
@@ -43,7 +47,7 @@ def s_search_callback(update, context):
         InlineKeyboardButton(
             'read', callback_data=f'read#{S_SEARCH_DATA[uuid][page-1]["id"]}'),
         InlineKeyboardButton(
-            'Download', url=f"https://t.me/nhentai_xbot", callback_data="ext#1231")
+            'Download', callback_data=f'download#{S_SEARCH_DATA[uuid][page-1]["id"]}')
     )
     caption = f"""
 *Title* : `{S_SEARCH_DATA[uuid][page-1]["title"]}`
@@ -57,6 +61,7 @@ def s_search_callback(update, context):
         caption=caption,
         reply_markup=paginator.markup,
         parse_mode='Markdown')
+    return ConversationHandler.END
 
 
 def s_conv(update, context):
@@ -71,6 +76,7 @@ def s_conv(update, context):
     try:
         context.bot.deleteMessage(
             chat_id=update.message.chat_id, message_id=update.message.message_id)
+        return ConversationHandler.END
 
     except Exception as e:
         logging.error(DEL_FAIL_LOG)
@@ -88,8 +94,11 @@ def s_with_q(update, context):
     try:
         context.bot.deleteMessage(
             chat_id=update.message.chat_id, message_id=update.message.message_id)
+        return ConversationHandler.END
+
     except Exception as e:
         logging.error(DEL_FAIL_LOG)
+        return ConversationHandler.END
 
 
 def pagination_search_context(update, context, query):
@@ -108,7 +117,7 @@ def pagination_search_context(update, context, query):
             InlineKeyboardButton(
                 'read', callback_data=f'read#{S_SEARCH_DATA[uuid][0]["id"]}'),
             InlineKeyboardButton(
-                'Download', callback_data="ext#1231")
+                'Download', callback_data=f'download#{S_SEARCH_DATA[uuid][0]["id"]}')
         )
         caption = f"""
 *Title* : `{S_SEARCH_DATA[uuid][0]["title"]}`
@@ -167,6 +176,7 @@ def single_manga(update, context):
     else:
         context.bot.sendMessage(
             chat_id=update.callback_query.message.chat_id, text="Error loading")
+        return ConversationHandler.END
 
 
 def single_manga_callback(update, context):
@@ -189,3 +199,26 @@ def single_manga_callback(update, context):
     )
     query.edit_message_media(
         media=InputMediaPhoto(media=SINGLE_MANGA_DATA[uuid]["images"][page-1]), reply_markup=paginator.markup)
+    return ConversationHandler.END
+
+
+def download_manga_callback(update, context):
+    query = update.callback_query
+    text = f"`downloading..,\nthis may take few min depend on the manga`"
+    print("downloading...")
+    context.bot.sendMessage(
+        chat_id=update.callback_query.message.chat_id, text=text, parse_mode="Markdown")
+    # query.answer("loading")
+    id = query.data.split('#')[1]
+    data = id_search_q(id)
+    title = data["title"]
+    img_list = data["images"]
+    print(img_list)
+    state = image_pdf(img_list=img_list, title=title)
+    if state:
+        manga_file = open(f'nhentaiBot/tempdir/{title}.pdf', 'rb')
+
+        response = context.bot.sendDocument(
+            chat_id=update.callback_query.message.chat_id, document=manga_file)
+
+        # os.remove(f'nhentaiBot/tempdir/{title}.pdf')

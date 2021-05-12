@@ -1,6 +1,6 @@
 # ---------------- IMPORTS -------------
 import logging
-from nhentaiBot.helpers.conversation_query import s_conv, s_search_callback, s_with_q, cancel, single_manga, single_manga_callback
+from nhentaiBot.helpers.conversation_query import download_manga_callback, s_conv, s_search_callback, s_with_q, cancel, single_manga, single_manga_callback
 from nhentaiBot import dp, updater
 from telegram import InlineKeyboardMarkup
 from telegram.ext import CommandHandler, InlineQueryHandler, MessageHandler, ConversationHandler, Filters, CallbackQueryHandler
@@ -96,6 +96,8 @@ def main():
     dp.add_handler(CallbackQueryHandler(single_manga, pattern="^read#"))
     dp.add_handler(CallbackQueryHandler(
         single_manga_callback, pattern="^manga_p#"))
+    dp.add_handler(CallbackQueryHandler(
+        download_manga_callback, pattern="^download#"))
 
     # --------- System Polling ------------
     updater.start_polling()
