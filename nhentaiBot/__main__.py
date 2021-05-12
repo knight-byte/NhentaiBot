@@ -34,19 +34,19 @@ To Start Inline select:
         logging.error(DEL_FAIL_LOG)
 
 
-def code(update, context):
-    text = "`feature code\nWIP`"
-    query = ""
+# def code(update, context):
+#     text = "`feature code\nWIP`"
 
-    # Calling Download funciton ( download with ID )
-    data = download_func(query)
-    context.bot.sendMessage(chat_id=update.message.chat_id,
-                            text=text, parse_mode="Markdown")
-    try:
-        context.bot.deleteMessage(
-            chat_id=update.message.chat_id, message_id=update.message.message_id)
-    except Exception as e:
-        logging.error(DEL_FAIL_LOG)
+
+#     # Calling Download funciton ( download with ID )
+
+#     context.bot.sendMessage(chat_id=update.message.chat_id,
+#                             text=text, parse_mode="Markdown")
+#     try:
+#         context.bot.deleteMessage(
+#             chat_id=update.message.chat_id, message_id=update.message.message_id)
+#     except Exception as e:
+#         logging.error(DEL_FAIL_LOG)
 
 
 def help(update, context):
@@ -81,7 +81,7 @@ def main():
     dp.add_handler(CommandHandler("start", start, run_async=True))
     dp.add_handler(CommandHandler("status", status, run_async=True))
     dp.add_handler(CommandHandler("help", help, run_async=True))
-    dp.add_handler(CommandHandler("code", code, run_async=True))
+    dp.add_handler(CommandHandler("code", single_manga, run_async=True))
     dp.add_handler(InlineQueryHandler(search_query))
     dp.add_handler(ConversationHandler(entry_points=[CommandHandler('search', s_conv, run_async=True)],
                                        states={

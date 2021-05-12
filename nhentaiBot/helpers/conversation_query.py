@@ -147,11 +147,21 @@ def pagination_search_context(update, context, query):
 # single manga view functiom
 def single_manga(update, context):
     global SINGLE_MANGA_DATA
-    query = update.callback_query
-    id = query.data[5:]
+    query = ""
+    chat_id = ""
+    id = ""
+    if update.callback_query == None:
+        query = " ".join(context.args)
+        chat_id = update.message.chat_id
+        id = query
+    else:
+        query = update.callback_query
+        chat_id = update.callback_query.message.chat_id
+        id = query.data[5:]
+
     # print("QUERY : ", id)
     data = id_search_q(id)
-    uuid = f"{update.callback_query.message.chat_id}{update.effective_user.id}"
+    uuid = f"{chat_id}{update.effective_user.id}"
     if len(data.keys()) > 0:
         SINGLE_MANGA_DATA[uuid] = data
         caption = f"""
@@ -166,7 +176,7 @@ def single_manga(update, context):
         )
         message = context.bot.send_photo(
             photo=SINGLE_MANGA_DATA[uuid]["images"][0],
-            chat_id=update.callback_query.message.chat_id,
+            chat_id=chat_id,
             caption=caption,
             reply_markup=paginator.markup,
             parse_mode='Markdown',
@@ -176,7 +186,7 @@ def single_manga(update, context):
         return ConversationHandler.END
     else:
         context.bot.sendMessage(
-            chat_id=update.callback_query.message.chat_id, text="Error loading")
+            chat_id=chat_id, text="Error loading")
         return ConversationHandler.END
 
 

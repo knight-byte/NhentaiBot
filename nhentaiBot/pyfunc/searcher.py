@@ -47,6 +47,3 @@ def id_search_q(query):
         return id
     else:
         return id
-
-
-print(len(id_search_q("999")["images"]))
