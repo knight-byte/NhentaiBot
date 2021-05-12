@@ -176,8 +176,6 @@ def single_manga(update, context):
         )
         paginator.add_before(
             InlineKeyboardButton(
-                'read', callback_data=f'read#{SINGLE_MANGA_DATA[uuid]["id"]}'),
-            InlineKeyboardButton(
                 'Download', callback_data=f"download#{SINGLE_MANGA_DATA[uuid]['id']}")
         )
         message = context.bot.send_photo(
