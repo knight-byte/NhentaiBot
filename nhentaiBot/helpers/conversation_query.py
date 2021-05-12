@@ -213,7 +213,7 @@ def download_manga_callback(update, context):
     data = id_search_q(id)
     title = data["title"]
     img_list = data["images"]
-    print(img_list)
+    # print(img_list)
     state = image_pdf(img_list=img_list, title=title)
     if state:
         manga_file = open(f'nhentaiBot/tempdir/{title}.pdf', 'rb')
