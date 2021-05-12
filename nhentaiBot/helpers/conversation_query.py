@@ -7,6 +7,7 @@ from telegram.ext import ConversationHandler
 import logging
 from nhentaiBot.helpers.constants import DEL_FAIL_LOG
 import os
+import re
 
 # ------- GLOBAL VAR ----------
 S_SEARCH_DATA = {}
@@ -214,6 +215,8 @@ def download_manga_callback(update, context):
     title = data["title"]
     img_list = data["images"]
     # print(img_list)
+    title = "".join(re.findall(r"[\w]+", string=title))
+
     state = image_pdf(img_list=img_list, title=title)
     if state:
         manga_file = open(f'nhentaiBot/tempdir/{title}.pdf', 'rb')
