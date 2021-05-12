@@ -5,7 +5,7 @@ from telegram import InlineKeyboardMarkup, parsemode
 def about(update, context):
     text = """`Hey!
 Bot Name     : nHentai BOT
-Username     : @nhenyai_xbot
+Username     : @nhentai_xbot
 Inline Mode  : True
 Group ( add ): True
 Developed by : Abunachar, Bhaskar
