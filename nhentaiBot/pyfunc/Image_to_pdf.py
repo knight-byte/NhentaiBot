@@ -6,7 +6,7 @@ import io
 # -------- FUNCTIONS -----
 
 
-def image_pdf(img_list, title):
+async def image_pdf(img_list, title):
 
     # opening raw images from URL
     raw_image = [Image.open(io.BytesIO(requests.get(url).content))

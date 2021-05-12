@@ -224,4 +224,4 @@ def download_manga_callback(update, context):
         response = context.bot.sendDocument(
             chat_id=update.callback_query.message.chat_id, document=manga_file)
 
-        # os.remove(f'nhentaiBot/tempdir/{title}.pdf')
+        os.remove(f'nhentaiBot/tempdir/{title}.pdf')
