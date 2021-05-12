@@ -174,6 +174,12 @@ def single_manga(update, context):
             len(SINGLE_MANGA_DATA[uuid]['images']),
             data_pattern="manga_p#{page}"
         )
+        paginator.add_before(
+            InlineKeyboardButton(
+                'read', callback_data=f'read#{SINGLE_MANGA_DATA[uuid]["id"]}'),
+            InlineKeyboardButton(
+                'Download', callback_data=f"download#{SINGLE_MANGA_DATA[uuid]['id']}")
+        )
         message = context.bot.send_photo(
             photo=SINGLE_MANGA_DATA[uuid]["images"][0],
             chat_id=chat_id,
