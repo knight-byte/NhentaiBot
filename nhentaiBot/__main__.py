@@ -1,6 +1,7 @@
 # ---------------- IMPORTS -------------
 import logging
-from nhentaiBot.helpers.conversation_query import download_manga_callback, s_conv, s_search_callback, s_with_q, cancel, single_manga, single_manga_callback
+from nhentaiBot.helpers.functions import about
+from nhentaiBot.helpers.conversation_query import s_conv, s_with_q, cancel, single_manga
 from nhentaiBot import dp, updater
 from telegram import InlineKeyboardMarkup
 from telegram.ext import CommandHandler, InlineQueryHandler, MessageHandler, ConversationHandler, Filters, CallbackQueryHandler
@@ -8,6 +9,7 @@ from nhentaiBot.helpers.Inline_query import search_query
 from nhentaiBot.helpers.Inline_keyboard import search_k
 from nhentaiBot.helpers.constants import DEL_FAIL_LOG
 from nhentaiBot.pyfunc.download_func import download_func
+from nhentaiBot.helpers.callback_functions import download_manga_callback, s_search_callback, single_manga_callback
 
 # ---------------- FUNCTIONS ------------
 
@@ -34,26 +36,12 @@ To Start Inline select:
         logging.error(DEL_FAIL_LOG)
 
 
-# def code(update, context):
-#     text = "`feature code\nWIP`"
-
-
-#     # Calling Download funciton ( download with ID )
-
-#     context.bot.sendMessage(chat_id=update.message.chat_id,
-#                             text=text, parse_mode="Markdown")
-#     try:
-#         context.bot.deleteMessage(
-#             chat_id=update.message.chat_id, message_id=update.message.message_id)
-#     except Exception as e:
-#         logging.error(DEL_FAIL_LOG)
-
-
 def help(update, context):
     text = """\
 `start` : `to start the bot`
-`code`  : `download with code`
+`code`  : `read/download with code`
 `search`: `Search nHentia`
+`about` : `About BOT`
 """
     try:
         context.bot.deleteMessage(
@@ -98,6 +86,8 @@ def main():
         single_manga_callback, pattern="^manga_p#"))
     dp.add_handler(CallbackQueryHandler(
         download_manga_callback, pattern="^download#"))
+    dp.add_handler(CommandHandler("about", about, run_async=True))
+    dp.add_handler(CallbackQueryHandler(about, pattern="^about_com$"))
 
     # --------- System Polling ------------
     updater.start_polling()
